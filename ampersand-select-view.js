@@ -53,8 +53,8 @@ module.exports = View.extend({
             opts.groupOptions.forEach(function(optgroup) {
                 optgroup.options.forEach(function(option) {
                     opts.options.push(option);
-                }.bind(this));
-            }.bind(this));
+                });
+            });
         }
 
         if (!Array.isArray(opts.options) && !opts.options.isCollection) {
@@ -62,11 +62,9 @@ module.exports = View.extend({
         }
         this.options = opts.options;
 
-        if (this.options.isCollection) {
-            this.idAttribute = opts.idAttribute || this.options.mainIndex || 'id';
-            this.textAttribute = opts.textAttribute || 'text';
-            this.disabledAttribute = opts.disabledAttribute;
-        }
+        this.idAttribute = opts.idAttribute || this.options.mainIndex || 'id';
+        this.textAttribute = opts.textAttribute || 'text';
+        this.disabledAttribute = opts.disabledAttribute;
 
         this.el = opts.el;
         this.label = opts.label || '';
@@ -394,19 +392,16 @@ module.exports = View.extend({
 
 
     getOptionValue: function(option) {
+        if (option.isState && this.idAttribute && this.idAttribute !== undefined) return option[this.idAttribute];
         if (Array.isArray(option)) return option[0];
-        if (this.options.isCollection) return option[this.idAttribute];
+        
         return option;
     },
 
     getOptionText: function(option) {
+        if (option.isState && this.textAttribute && option[this.textAttribute] !== undefined) return option[this.textAttribute];
         if (Array.isArray(option)) return option[1];
-        if (this.options.isCollection) {
-            if (this.textAttribute && option[this.textAttribute] !== undefined) {
-                return option[this.textAttribute];
-            }
-        }
-
+    
         return option;
     },
 
